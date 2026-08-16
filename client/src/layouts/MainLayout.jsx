@@ -3,16 +3,19 @@ import Footer from "../components/layout/Footer";
 
 function MainLayout() {
   return (
-    <>
+    <div className="app-layout">
       <Navbar />
 
-      <main>
-        <h1>Main Layout</h1>
-        <p>This is the main content area of my project.</p>
+      <main className="main-content">
+        <h1>Job Portal</h1>
+        <p>Welcome to the Job Portal application.</p>
+        <p>
+          This is the main content area for my Project.
+        </p>
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
 

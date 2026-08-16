@@ -1,7 +1,20 @@
+@import "./variables.css";
+
+/* =========================
+   RESET
+   ========================= */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
 }
 
 body {
@@ -10,17 +23,207 @@ body {
   color: var(--text-color);
 }
 
-h1,
-h2,
-h3,
-h4 {
-  margin-bottom: 10px;
+
+/* =========================
+   APP LAYOUT
+   ========================= */
+
+.app-layout {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-p {
-  margin-bottom: 10px;
+
+/* =========================
+   CONTAINER
+   ========================= */
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-button {
+
+/* =========================
+   NAVBAR
+   ========================= */
+
+.navbar {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 20px 0;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: var(--white-color);
+  font-size: 24px;
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-links span {
+  color: var(--white-color);
+  font-size: 16px;
   cursor: pointer;
+}
+
+
+/* =========================
+   MAIN CONTENT
+   ========================= */
+
+.main-content {
+  width: 100%;
+  flex: 1;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.main-content h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.main-content p {
+  margin-bottom: 10px;
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+.footer {
+  width: 100%;
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  padding: 20px;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+
+/* =========================
+   PAGE COMPONENTS
+   ========================= */
+
+.page {
+  width: 100%;
+  padding: 40px;
+}
+
+.page h1 {
+  margin-bottom: 20px;
+}
+
+.page h2 {
+  margin-bottom: 15px;
+}
+
+.page p {
+  margin-bottom: 10px;
+}
+
+
+/* =========================
+   BUTTON
+   ========================= */
+
+.button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   CARD
+   ========================= */
+
+.card {
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+
+/* =========================
+   LOADER
+   ========================= */
+
+.loader {
+  padding: 20px;
+  text-align: center;
+}
+
+
+/* =========================
+   SIDEBAR
+   ========================= */
+
+.sidebar {
+  padding: 20px;
+  background-color: var(--white-color);
+  border-right: 1px solid var(--border-color);
+}
+
+
+/* =========================
+   AUTH LAYOUT
+   ========================= */
+
+.auth-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 768px) {
+  .navbar .container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-links {
+    gap: 15px;
+  }
+
+  .main-content {
+    padding: 50px 15px;
+  }
+
+  .page {
+    padding: 30px 15px;
+  }
 }

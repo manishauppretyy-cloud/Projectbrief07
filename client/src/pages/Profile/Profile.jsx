@@ -1,9 +1,14 @@
 function Profile() {
   return (
-    <div>
+    <section className="page">
       <h1>Profile Page</h1>
-      <p>This is the profile page.</p>
-    </div>
+
+      <h2>Profile</h2>
+
+      <p>
+        This is a placeholder for the profile page.
+      </p>
+    </section>
   );
 }
 

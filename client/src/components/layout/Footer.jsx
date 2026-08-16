@@ -1,7 +1,7 @@
 function Footer() {
   return (
-    <footer>
-      <p> project footer</p>
+    <footer className="footer">
+      <p>Job Portal System</p>
     </footer>
   );
 }
