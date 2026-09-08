@@ -4,7 +4,6 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-container">
-
         <NavLink to="/" className="logo">
           JobPortal
         </NavLink>
@@ -38,6 +37,15 @@ function Navbar() {
           </NavLink>
 
           <NavLink
+            to="/job-posting"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Post Job
+          </NavLink>
+
+          <NavLink
             to="/login"
             className={({ isActive }) =>
               isActive ? "nav-link active" : "nav-link"
@@ -46,7 +54,6 @@ function Navbar() {
             Login
           </NavLink>
         </div>
-
       </div>
     </nav>
   );
