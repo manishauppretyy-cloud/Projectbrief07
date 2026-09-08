@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
-import PageTitle from "../../components/ui/PageTitle";
+import WelcomeMessage from "../../components/ui/WelcomeMessage";
 
 function Dashboard() {
 
@@ -35,6 +35,9 @@ function Dashboard() {
     location: "",
   });
 
+  // Sprint 9 - useState
+  const [notificationCount, setNotificationCount] = useState(0);
+
   const addJob = () => {
 
     if (
@@ -55,6 +58,9 @@ function Dashboard() {
     };
 
     setJobs([...jobs, job]);
+
+    // Update notification state
+    setNotificationCount(notificationCount + 1);
 
     setNewJob({
       title: "",
@@ -85,7 +91,7 @@ function Dashboard() {
     <section className="dashboard-page">
 
       {/* ==============================
-          PAGE TITLE - SPRINT 7
+          PAGE TITLE - SPRINT 9
           ============================== */}
 
       <div className="page-header">
@@ -96,10 +102,18 @@ function Dashboard() {
             DASHBOARD
           </p>
 
-          <PageTitle
-            title="Welcome back, Manisha 👋"
-            subtitle="Manage your job applications from here."
+          {/* Dynamic Welcome Component using Props */}
+
+          <WelcomeMessage
+            userName="Manisha"
+            projectName="JobPortal"
           />
+
+          {/* Sprint 9 - Dynamic State */}
+
+          <p>
+            Notifications: {notificationCount}
+          </p>
 
         </div>
 
@@ -251,7 +265,7 @@ function Dashboard() {
 
 
       {/* ==============================
-          JOB LIST
+          JOB LIST - CONDITIONAL RENDERING
           ============================== */}
 
       <Card
@@ -260,7 +274,6 @@ function Dashboard() {
       >
 
         <div className="card-heading">
-
 
           <span>
             {jobs.length} Jobs
@@ -271,92 +284,100 @@ function Dashboard() {
 
         <div className="job-list">
 
-          {jobs.map((job) => (
+          {/* Sprint 9 - Conditional Rendering */}
 
-            <div
-              className="job-item"
-              key={job.id}
-            >
+          {jobs.length === 0 ? (
+            <p>No job applications available.</p>
+          ) : (
 
-              <div className="job-info">
+            jobs.map((job) => (
 
-                <div className="job-icon">
-                  💼
+              <div
+                className="job-item"
+                key={job.id}
+              >
+
+                <div className="job-info">
+
+                  <div className="job-icon">
+                    💼
+                  </div>
+
+
+                  <div>
+
+                    <h3>
+                      {job.title}
+                    </h3>
+
+                    <p>
+                      {job.company}
+                    </p>
+
+                    <small>
+                      📍 {job.location}
+                    </small>
+
+                  </div>
+
                 </div>
 
 
-                <div>
+                <div className="job-actions">
 
-                  <h3>
-                    {job.title}
-                  </h3>
+                  {/* Change Application Status */}
 
-                  <p>
-                    {job.company}
-                  </p>
+                  <select
+                    value={job.status}
+                    onChange={(e) =>
+                      changeStatus(
+                        job.id,
+                        e.target.value
+                      )
+                    }
+                  >
 
-                  <small>
-                    📍 {job.location}
-                  </small>
+                    <option value="Saved">
+                      Saved
+                    </option>
+
+                    <option value="Applied">
+                      Applied
+                    </option>
+
+                    <option value="Interview">
+                      Interview
+                    </option>
+
+                    <option value="Rejected">
+                      Rejected
+                    </option>
+
+                    <option value="Selected">
+                      Selected
+                    </option>
+
+                  </select>
+
+
+                  {/* Reusable Button */}
+
+                  <Button
+                    className="delete-btn"
+                    onClick={() =>
+                      deleteJob(job.id)
+                    }
+                  >
+                    Delete
+                  </Button>
 
                 </div>
 
               </div>
 
+            ))
 
-              <div className="job-actions">
-
-                {/* Change Application Status */}
-
-                <select
-                  value={job.status}
-                  onChange={(e) =>
-                    changeStatus(
-                      job.id,
-                      e.target.value
-                    )
-                  }
-                >
-
-                  <option value="Saved">
-                    Saved
-                  </option>
-
-                  <option value="Applied">
-                    Applied
-                  </option>
-
-                  <option value="Interview">
-                    Interview
-                  </option>
-
-                  <option value="Rejected">
-                    Rejected
-                  </option>
-
-                  <option value="Selected">
-                    Selected
-                  </option>
-
-                </select>
-
-
-                {/* Reusable Button */}
-
-                <Button
-                  className="delete-btn"
-                  onClick={() =>
-                    deleteJob(job.id)
-                  }
-                >
-                  Delete
-                </Button>
-
-              </div>
-
-            </div>
-
-          ))}
+          )}
 
         </div>
 
