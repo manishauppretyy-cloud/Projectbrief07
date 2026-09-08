@@ -227,3 +227,115 @@ body {
     padding: 30px 15px;
   }
 }
+
+/* Home Page */
+.home-page {
+  padding: 40px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 50px 0;
+}
+
+.hero h1 {
+  font-size: 56px;
+  margin: 10px 0;
+  color: #1f2937;
+}
+
+.hero h1 span {
+  color: #4f46e5;
+}
+
+.hero-text {
+  font-size: 18px;
+  color: #64748b;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  border: none;
+}
+
+.btn.primary {
+  background: #4f46e5;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #4338ca;
+}
+
+.btn.secondary {
+  background: white;
+  color: #4f46e5;
+  border: 2px solid #4f46e5;
+}
+
+.btn.secondary:hover {
+  background: #eef2ff;
+}
+
+/* Hero Card */
+.hero-card {
+  min-width: 280px;
+  text-align: center;
+  padding: 35px;
+}
+
+.hero-icon {
+  font-size: 55px;
+  margin-bottom: 15px;
+}
+
+/* Features */
+.section {
+  max-width: 1100px;
+  margin: 30px auto;
+  text-align: center;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.feature-card {
+  padding: 25px;
+  text-align: center;
+}
+
+.feature-card > div {
+  font-size: 40px;
+}
+
+.feature-card h3 {
+  margin: 12px 0;
+}
+
+.feature-card p {
+  color: #64748b;
+}

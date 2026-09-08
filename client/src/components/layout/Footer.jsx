@@ -1,7 +1,8 @@
 function Footer() {
   return (
     <footer className="footer">
-      <p>Job Portal System</p>
+      <p>© {new Date().getFullYear()} JobPortal. All Rights Reserved.</p>
+      <p>Find jobs. Build careers. Grow together.</p>
     </footer>
   );
 }

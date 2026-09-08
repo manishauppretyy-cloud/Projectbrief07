@@ -1,14 +1,52 @@
+import { NavLink } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="container">
-        <h2 className="logo">Job Portal</h2>
+      <div className="nav-container">
+
+        <NavLink to="/" className="logo">
+          JobPortal
+        </NavLink>
 
         <div className="nav-links">
-          <span>Home</span>
-          <span>Login</span>
-          <span>Profile</span>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Dashboard
+          </NavLink>
+
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Profile
+          </NavLink>
+
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Login
+          </NavLink>
         </div>
+
       </div>
     </nav>
   );
