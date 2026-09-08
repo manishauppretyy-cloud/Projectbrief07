@@ -1,0 +1,50 @@
+/* =================================
+   SPRINT 8 - GLOBAL RESPONSIVE BASE
+   ================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Images should never overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent long text from breaking the layout */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  overflow-wrap: break-word;
+}
+
+/* Responsive form elements */
+input,
+textarea,
+select,
+button {
+  max-width: 100%;
+}
+
+/* Better mobile spacing */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+}
