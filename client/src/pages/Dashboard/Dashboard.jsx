@@ -1,90 +1,80 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import WelcomeMessage from "../../components/ui/WelcomeMessage";
+import {
+  createJob as createJobRequest,
+  deleteJob as deleteJobRequest,
+  getJobs,
+  updateJob as updateJobRequest
+} from "../../services/jobService";
 
 function Dashboard() {
-
-  const [jobs, setJobs] = useState([
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "Tech Solutions",
-      location: "Guwahati",
-      status: "Applied",
-    },
-    {
-      id: 2,
-      title: "React Developer",
-      company: "WebWorks",
-      location: "Remote",
-      status: "Interview",
-    },
-    {
-      id: 3,
-      title: "Junior Web Developer",
-      company: "Digital Hub",
-      location: "Delhi",
-      status: "Saved",
-    },
-  ]);
-
+  const [jobs, setJobs] = useState([]);
   const [newJob, setNewJob] = useState({
     title: "",
     company: "",
     location: "",
   });
-
-  // Sprint 9 - useState
   const [notificationCount, setNotificationCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const addJob = () => {
+  useEffect(() => {
+    let active = true;
+    getJobs()
+      .then((loadedJobs) => {
+        if (active) setJobs(loadedJobs);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
 
-    if (
-      !newJob.title ||
-      !newJob.company ||
-      !newJob.location
-    ) {
-      alert("Please fill all fields");
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const addJob = async () => {
+    if (!newJob.title.trim() || !newJob.company.trim() || !newJob.location.trim()) {
+      setError("Please fill all fields");
       return;
     }
 
-    const job = {
-      id: Date.now(),
-      title: newJob.title,
-      company: newJob.company,
-      location: newJob.location,
-      status: "Saved",
-    };
-
-    setJobs([...jobs, job]);
-
-    // Update notification state
-    setNotificationCount(notificationCount + 1);
-
-    setNewJob({
-      title: "",
-      company: "",
-      location: "",
-    });
-
-    alert("Job added successfully!");
+    try {
+      const job = await createJobRequest(newJob);
+      setJobs((currentJobs) => [job, ...currentJobs]);
+      setNotificationCount((count) => count + 1);
+      setNewJob({ title: "", company: "", location: "" });
+      setError("");
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
-  const deleteJob = (id) => {
-    setJobs(
-      jobs.filter((job) => job.id !== id)
-    );
+  const deleteJob = async (id) => {
+    try {
+      await deleteJobRequest(id);
+      setJobs((currentJobs) => currentJobs.filter((job) => job.id !== id));
+      setError("");
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
-  const changeStatus = (id, status) => {
-    setJobs(
-      jobs.map((job) =>
-        job.id === id
-          ? { ...job, status }
-          : job
-      )
-    );
+  const changeStatus = async (id, status) => {
+    try {
+      const updatedJob = await updateJobRequest(id, { status });
+      setJobs((currentJobs) =>
+        currentJobs.map((job) => (job.id === id ? updatedJob : job))
+      );
+      setError("");
+    } catch (requestError) {
+      setError(requestError.message);
+    }
   };
 
   return (
@@ -263,6 +253,8 @@ function Dashboard() {
 
       </Card>
 
+      {error && <p role="alert">{error}</p>}
+
 
       {/* ==============================
           JOB LIST - CONDITIONAL RENDERING
@@ -284,9 +276,9 @@ function Dashboard() {
 
         <div className="job-list">
 
-          {/* Sprint 9 - Conditional Rendering */}
-
-          {jobs.length === 0 ? (
+          {loading ? (
+            <p>Loading applications...</p>
+          ) : jobs.length === 0 ? (
             <p>No job applications available.</p>
           ) : (
 

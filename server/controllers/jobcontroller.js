@@ -7,13 +7,15 @@ const getJobs = (req, res) => {
         id: 1,
         title: "Frontend Developer",
         company: "Tech Solutions",
-        location: "Guwahati"
+        location: "Guwahati",
+        jobType: "Full Time"
       },
       {
         id: 2,
         title: "React Developer",
         company: "WebWorks",
-        location: "Remote"
+        location: "Remote",
+        jobType: "Part Time"
       }
     ]
   });
@@ -25,15 +27,36 @@ const getJobById = (req, res) => {
   res.json({
     success: true,
     message: "Job fetched successfully",
-    jobId: id
+    job: {
+      id: Number(id),
+      title: "Frontend Developer",
+      company: "Tech Solutions",
+      location: "Guwahati",
+      jobType: "Full Time"
+    }
   });
 };
 
 const createJob = (req, res) => {
+  const { title, company, location, jobType } = req.body;
+
+  if (!title || !company || !location) {
+    return res.status(400).json({
+      success: false,
+      message: "Title, company, and location are required"
+    });
+  }
+
   res.status(201).json({
     success: true,
     message: "Job created successfully",
-    job: req.body
+    job: {
+      id: 3,
+      title,
+      company,
+      location,
+      jobType
+    }
   });
 };
 
@@ -43,8 +66,10 @@ const updateJob = (req, res) => {
   res.json({
     success: true,
     message: "Job updated successfully",
-    jobId: id,
-    updatedJob: req.body
+    job: {
+      id: Number(id),
+      ...req.body
+    }
   });
 };
 
@@ -54,7 +79,7 @@ const deleteJob = (req, res) => {
   res.json({
     success: true,
     message: "Job deleted successfully",
-    jobId: id
+    jobId: Number(id)
   });
 };
 
