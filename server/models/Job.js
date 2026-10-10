@@ -17,6 +17,24 @@ const jobSchema = new mongoose.Schema(
       required: true,
       trim: true
     },
+    jobType: {
+      type: String,
+      trim: true
+    },
+    salary: {
+      type: Number,
+      min: 1
+    },
+    email: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    },
+    description: {
+      type: String,
+      trim: true
+    },
     status: {
       type: String,
       enum: ["Saved", "Applied", "Interview", "Rejected", "Selected"],

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import PageTitle from "../../components/ui/PageTitle";
+import { createJob } from "../../services/jobService";
 
 function JobPosting() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ function JobPosting() {
   });
 
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
   const [submittedJob, setSubmittedJob] = useState(null);
 
   const handleChange = (event) => {
@@ -69,7 +71,7 @@ function JobPosting() {
     return newErrors;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const validationErrors = validateForm();
@@ -81,17 +83,33 @@ function JobPosting() {
     }
 
     setErrors({});
-    setSubmittedJob(formData);
+    setSubmitError("");
+    setSubmittedJob(null);
 
-    setFormData({
-      jobTitle: "",
-      company: "",
-      location: "",
-      jobType: "",
-      salary: "",
-      email: "",
-      description: "",
-    });
+    try {
+      const job = await createJob({
+        title: formData.jobTitle,
+        company: formData.company,
+        location: formData.location,
+        jobType: formData.jobType,
+        salary: Number(formData.salary),
+        email: formData.email,
+        description: formData.description
+      });
+      setSubmittedJob({ ...job, jobTitle: job.title });
+
+      setFormData({
+        jobTitle: "",
+        company: "",
+        location: "",
+        jobType: "",
+        salary: "",
+        email: "",
+        description: "",
+      });
+    } catch (requestError) {
+      setSubmitError(requestError.message);
+    }
   };
 
   const handleReset = () => {
@@ -118,6 +136,8 @@ function JobPosting() {
 
       <Card className="form-card">
         <form onSubmit={handleSubmit} noValidate>
+          {submitError && <p className="form-error" role="alert">{submitError}</p>}
+
           <div className="form-group">
             <label htmlFor="jobTitle">Job Title *</label>
             <input
