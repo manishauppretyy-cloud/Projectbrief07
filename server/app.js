@@ -5,6 +5,7 @@ const cors = require("cors");
 const testRoutes = require("./routes/testRoutes");
 const jobRoutes = require("./routes/jobRoutes");
 const applicantRoutes = require("./routes/applicantRoutes");
+const authRoutes = require("./routes/authRoutes");
 const requestLogger = require("./middleware/requestLogger");
 
 const app = express();
@@ -23,6 +24,9 @@ app.use("/api/jobs", jobRoutes);
 
 // Applicant routes
 app.use("/api/applicants", applicantRoutes);
+
+// Authentication routes
+app.use("/api/auth", authRoutes);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
