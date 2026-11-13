@@ -1,7 +1,9 @@
+
 import { useEffect, useState } from "react";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import WelcomeMessage from "../../components/ui/WelcomeMessage";
+
 import {
   createJob as createJobRequest,
   deleteJob as deleteJobRequest,
@@ -11,17 +13,30 @@ import {
 
 function Dashboard() {
   const [jobs, setJobs] = useState([]);
+
   const [newJob, setNewJob] = useState({
     title: "",
     company: "",
-    location: "",
+    location: ""
   });
+
   const [notificationCount, setNotificationCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Edit Job States
+  const [editingJobId, setEditingJobId] = useState(null);
+
+  const [editJob, setEditJob] = useState({
+    title: "",
+    company: "",
+    location: ""
+  });
+
+  // GET - Fetch jobs from MongoDB
   useEffect(() => {
     let active = true;
+
     getJobs()
       .then((loadedJobs) => {
         if (active) setJobs(loadedJobs);
@@ -38,39 +53,117 @@ function Dashboard() {
     };
   }, []);
 
+  // POST - Add a new job
   const addJob = async () => {
-    if (!newJob.title.trim() || !newJob.company.trim() || !newJob.location.trim()) {
+    if (
+      !newJob.title.trim() ||
+      !newJob.company.trim() ||
+      !newJob.location.trim()
+    ) {
       setError("Please fill all fields");
       return;
     }
 
     try {
       const job = await createJobRequest(newJob);
+
       setJobs((currentJobs) => [job, ...currentJobs]);
       setNotificationCount((count) => count + 1);
-      setNewJob({ title: "", company: "", location: "" });
+
+      setNewJob({
+        title: "",
+        company: "",
+        location: ""
+      });
+
       setError("");
     } catch (requestError) {
       setError(requestError.message);
     }
   };
 
+  // Open the Edit Form
+  const startEdit = (job) => {
+    setEditingJobId(job.id);
+
+    setEditJob({
+      title: job.title || "",
+      company: job.company || "",
+      location: job.location || ""
+    });
+
+    setError("");
+  };
+
+  // PUT - Save updated job details
+  const saveEdit = async () => {
+    if (
+      !editJob.title.trim() ||
+      !editJob.company.trim() ||
+      !editJob.location.trim()
+    ) {
+      setError("Please fill all fields");
+      return;
+    }
+
+    try {
+      const updatedJob = await updateJobRequest(
+        editingJobId,
+        editJob
+      );
+
+      setJobs((currentJobs) =>
+        currentJobs.map((job) =>
+          job.id === editingJobId ? updatedJob : job
+        )
+      );
+
+      setEditingJobId(null);
+
+      setEditJob({
+        title: "",
+        company: "",
+        location: ""
+      });
+
+      setError("");
+    } catch (requestError) {
+      setError(requestError.message);
+    }
+  };
+
+  // DELETE - Delete a job with confirmation
   const deleteJob = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this job?"
+    );
+
+    if (!confirmDelete) return;
+
     try {
       await deleteJobRequest(id);
-      setJobs((currentJobs) => currentJobs.filter((job) => job.id !== id));
+
+      setJobs((currentJobs) =>
+        currentJobs.filter((job) => job.id !== id)
+      );
+
       setError("");
     } catch (requestError) {
       setError(requestError.message);
     }
   };
 
+  // PUT - Change application status
   const changeStatus = async (id, status) => {
     try {
       const updatedJob = await updateJobRequest(id, { status });
+
       setJobs((currentJobs) =>
-        currentJobs.map((job) => (job.id === id ? updatedJob : job))
+        currentJobs.map((job) =>
+          job.id === id ? updatedJob : job
+        )
       );
+
       setError("");
     } catch (requestError) {
       setError(requestError.message);
@@ -80,128 +173,76 @@ function Dashboard() {
   return (
     <section className="dashboard-page">
 
-      {/* ==============================
-          PAGE TITLE - SPRINT 9
-          ============================== */}
-
+      {/* PAGE HEADER */}
       <div className="page-header">
-
         <div>
-
           <p className="small-title">
             DASHBOARD
           </p>
-
-          {/* Dynamic Welcome Component using Props */}
 
           <WelcomeMessage
             userName="Manisha"
             projectName="JobPortal"
           />
 
-          {/* Sprint 9 - Dynamic State */}
-
           <p>
             Notifications: {notificationCount}
           </p>
-
         </div>
-
       </div>
 
-
-      {/* ==============================
-          STATISTICS
-          ============================== */}
-
+      {/* STATISTICS */}
       <div className="stats-grid">
 
         <Card className="stat-card">
-
           <span>📋</span>
-
-          <h2>
-            {jobs.length}
-          </h2>
-
-          <p>
-            Total Applications
-          </p>
-
+          <h2>{jobs.length}</h2>
+          <p>Total Applications</p>
         </Card>
 
-
         <Card className="stat-card">
-
           <span>⏳</span>
-
           <h2>
             {
               jobs.filter(
-                (job) =>
-                  job.status === "Applied"
+                (job) => job.status === "Applied"
               ).length
             }
           </h2>
-
-          <p>
-            Applied
-          </p>
-
+          <p>Applied</p>
         </Card>
 
-
         <Card className="stat-card">
-
           <span>🎯</span>
-
           <h2>
             {
               jobs.filter(
-                (job) =>
-                  job.status === "Interview"
+                (job) => job.status === "Interview"
               ).length
             }
           </h2>
-
-          <p>
-            Interviews
-          </p>
-
+          <p>Interviews</p>
         </Card>
 
-
         <Card className="stat-card">
-
           <span>⭐</span>
-
           <h2>
             {
               jobs.filter(
-                (job) =>
-                  job.status === "Saved"
+                (job) => job.status === "Saved"
               ).length
             }
           </h2>
-
-          <p>
-            Saved Jobs
-          </p>
-
+          <p>Saved Jobs</p>
         </Card>
 
       </div>
 
-
-      {/* ==============================
-          ADD JOB
-          ============================== */}
-
+      {/* ADD JOB FORM */}
       <Card
         title="Add Job Application"
         className="dashboard-card"
       >
-
         <div className="form-grid">
 
           <input
@@ -211,11 +252,10 @@ function Dashboard() {
             onChange={(e) =>
               setNewJob({
                 ...newJob,
-                title: e.target.value,
+                title: e.target.value
               })
             }
           />
-
 
           <input
             type="text"
@@ -224,11 +264,10 @@ function Dashboard() {
             onChange={(e) =>
               setNewJob({
                 ...newJob,
-                company: e.target.value,
+                company: e.target.value
               })
             }
           />
-
 
           <input
             type="text"
@@ -237,42 +276,34 @@ function Dashboard() {
             onChange={(e) =>
               setNewJob({
                 ...newJob,
-                location: e.target.value,
+                location: e.target.value
               })
             }
           />
-
-
-          {/* Reusable Button */}
 
           <Button onClick={addJob}>
             + Add Job
           </Button>
 
         </div>
-
       </Card>
 
-      {error && <p role="alert">{error}</p>}
+      {/* ERROR MESSAGE */}
+      {error && (
+        <p role="alert">
+          {error}
+        </p>
+      )}
 
-
-      {/* ==============================
-          JOB LIST - CONDITIONAL RENDERING
-          ============================== */}
-
+      {/* JOB LIST */}
       <Card
         title="My Applications"
         className="dashboard-card"
       >
 
         <div className="card-heading">
-
-          <span>
-            {jobs.length} Jobs
-          </span>
-
+          <span>{jobs.length} Jobs</span>
         </div>
-
 
         <div className="job-list">
 
@@ -295,75 +326,104 @@ function Dashboard() {
                     💼
                   </div>
 
-
                   <div>
-
-                    <h3>
-                      {job.title}
-                    </h3>
-
-                    <p>
-                      {job.company}
-                    </p>
-
-                    <small>
-                      📍 {job.location}
-                    </small>
-
+                    <h3>{job.title}</h3>
+                    <p>{job.company}</p>
+                    <small>📍 {job.location}</small>
                   </div>
 
                 </div>
 
-
+                {/* JOB ACTIONS */}
                 <div className="job-actions">
 
-                  {/* Change Application Status */}
-
+                  {/* Change Status */}
                   <select
                     value={job.status}
                     onChange={(e) =>
-                      changeStatus(
-                        job.id,
-                        e.target.value
-                      )
+                      changeStatus(job.id, e.target.value)
                     }
                   >
-
-                    <option value="Saved">
-                      Saved
-                    </option>
-
-                    <option value="Applied">
-                      Applied
-                    </option>
-
-                    <option value="Interview">
-                      Interview
-                    </option>
-
-                    <option value="Rejected">
-                      Rejected
-                    </option>
-
-                    <option value="Selected">
-                      Selected
-                    </option>
-
+                    <option value="Saved">Saved</option>
+                    <option value="Applied">Applied</option>
+                    <option value="Interview">Interview</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Selected">Selected</option>
                   </select>
 
+                  {/* Edit Button */}
+                  <Button
+                    onClick={() => startEdit(job)}
+                  >
+                    Edit
+                  </Button>
 
-                  {/* Reusable Button */}
-
+                  {/* Delete Button */}
                   <Button
                     className="delete-btn"
-                    onClick={() =>
-                      deleteJob(job.id)
-                    }
+                    onClick={() => deleteJob(job.id)}
                   >
                     Delete
                   </Button>
 
                 </div>
+
+                {/* EDIT JOB FORM */}
+                {editingJobId === job.id && (
+
+                  <div className="edit-job-form">
+
+                    <h4>Edit Job</h4>
+
+                    <input
+                      type="text"
+                      placeholder="Job title"
+                      value={editJob.title}
+                      onChange={(e) =>
+                        setEditJob({
+                          ...editJob,
+                          title: e.target.value
+                        })
+                      }
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Company"
+                      value={editJob.company}
+                      onChange={(e) =>
+                        setEditJob({
+                          ...editJob,
+                          company: e.target.value
+                        })
+                      }
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="Location"
+                      value={editJob.location}
+                      onChange={(e) =>
+                        setEditJob({
+                          ...editJob,
+                          location: e.target.value
+                        })
+                      }
+                    />
+
+                    <Button onClick={saveEdit}>
+                      Save Changes
+                    </Button>
+
+                    <Button
+                      onClick={() => setEditingJobId(null)}
+                    >
+                      Cancel
+                    </Button>
+
+                  </div>
+
+                )}
 
               </div>
 
@@ -372,7 +432,6 @@ function Dashboard() {
           )}
 
         </div>
-
       </Card>
 
     </section>
