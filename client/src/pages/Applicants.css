@@ -1,0 +1,162 @@
+
+/* Applicants Page */
+
+.applicants-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 30px;
+  color: #1e293b;
+  font-family: Arial, sans-serif;
+}
+
+.applicants-page h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #172554;
+  margin-bottom: 8px;
+}
+
+.applicants-page > p {
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* Section headings */
+
+.applicants-page h2 {
+  font-size: 21px;
+  color: #1e293b;
+  margin: 30px 0 18px;
+}
+
+/* Applicant Form */
+
+.applicants-page form {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+  border: 1px solid #e2e8f0;
+}
+
+.applicants-page form input {
+  width: 100%;
+  padding: 13px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+
+.applicants-page form input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.applicants-page form button {
+  grid-column: 1 / -1;
+  padding: 13px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.applicants-page form button:hover {
+  background: #1d4ed8;
+}
+
+/* Applicant Cards */
+
+.applicant-card {
+  background: #ffffff;
+  padding: 22px;
+  margin-bottom: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  transition: 0.2s;
+}
+
+.applicant-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.09);
+}
+
+.applicant-card h3 {
+  color: #1e40af;
+  font-size: 19px;
+  margin: 0 0 14px;
+}
+
+.applicant-card p {
+  color: #475569;
+  font-size: 14px;
+  margin: 9px 0;
+}
+
+/* Action Buttons */
+
+.applicant-card button {
+  padding: 10px 18px;
+  margin: 12px 10px 0 0;
+  border: none;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.applicant-card button:first-of-type {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.applicant-card button:first-of-type:hover {
+  background: #bbf7d0;
+}
+
+.applicant-card button:last-of-type {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.applicant-card button:last-of-type:hover {
+  background: #fecaca;
+}
+
+/* Mobile Responsive */
+
+@media (max-width: 600px) {
+  .applicants-page {
+    padding: 18px;
+    margin: 20px auto;
+  }
+
+  .applicants-page h1 {
+    font-size: 26px;
+  }
+
+  .applicants-page form {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .applicants-page form button {
+    grid-column: 1;
+  }
+
+  .applicant-card {
+    padding: 18px;
+  }
+}

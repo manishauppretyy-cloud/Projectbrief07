@@ -1,8 +1,10 @@
+
 const express = require("express");
 const cors = require("cors");
 
 const testRoutes = require("./routes/testRoutes");
 const jobRoutes = require("./routes/jobRoutes");
+const applicantRoutes = require("./routes/applicantRoutes");
 const requestLogger = require("./middleware/requestLogger");
 
 const app = express();
@@ -19,6 +21,10 @@ app.use("/api/test", testRoutes);
 // Job routes
 app.use("/api/jobs", jobRoutes);
 
+// Applicant routes
+app.use("/api/applicants", applicantRoutes);
+
+// Error handling middleware
 app.use((error, req, res, next) => {
   if (res.headersSent) {
     return next(error);
